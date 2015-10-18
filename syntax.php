@@ -445,7 +445,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
         if (!empty($this->params['adminGroups'])) {
             $adminGroups = explode('|', $this->params['adminGroups']); // array of adminGroups
             $usersGroups = $INFO['userinfo']['grps'];  // array of groups that the user is in
-            if (count(array_intersect($adminGroups, $usersGroups)) > 0) $allowFlag true;
+            if(count(array_intersect($adminGroups, $usersGroups)) > 0) $allowFlag = true;
         }
         
         //check adminUsers
