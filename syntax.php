@@ -1,9 +1,10 @@
 <?php
 /**
- * Doodle Plugin 2.0: helps to schedule meetings
+ * Doodle Plugin 3: helps to schedule meetings
  *
  * @license	GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * @url     http://www.dokuwiki.org/plugin:doodle2
+ * @url     http://www.dokuwiki.org/plugin:doodle3
+ * @author	Matthias Jung <matzekuh@web.de>
  * @author  Robert Rackl <wiki@doogie.de>
  * @author	Jonathan Tsai <tryweb@ichiayi.com>
  * @author  Esther Brunner <wikidesign@gmail.com>
@@ -52,12 +53,25 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * The doodle's data is saved in '<dokuwiki>/data/meta/title_of_vote.doodle'. The filename is the (masked) title. 
  * This has the advantage that you can move your doodle to another page, without loosing the data.
  */
-class syntax_plugin_doodle extends DokuWiki_Syntax_Plugin 
+class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin 
 {
     const AUTH_NONE = 0;
     const AUTH_IP   = 1;
     const AUTH_USER = 2;
 
+    /**
+     * return info about this plugin
+     */
+    function getInfo() {
+        return array(
+            'author' => 'Matthias Jung',
+            'email'  => 'matzekuh@web.de',
+            'date'   => '2015/10/18',
+            'name'   => 'Doodle Plugin 3',
+            'desc'   => 'helps to schedule meetings',
+            'url'    => 'https://www.dokuwiki.org/plugin:doodle3',
+        );
+    }
     function getType()  { return 'substition';}
     function getPType() { return 'block';}
     function getSort()  { return 168; }
@@ -66,7 +80,7 @@ class syntax_plugin_doodle extends DokuWiki_Syntax_Plugin
      * Connect pattern to lexer
      */
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('<doodle\b.*?>.+?</doodle>', $mode, 'plugin_doodle');
+        $this->Lexer->addSpecialPattern('<doodle\b.*?>.+?</doodle>', $mode, 'plugin_doodle3');
     }
 
     /**
