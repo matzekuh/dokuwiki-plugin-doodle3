@@ -12,13 +12,8 @@
   $c = count($template['choices']);
 ?>
 
-<!-- include stylesheet for doodle -->
-<head>
-<link rel="stylesheet" type="text/css" href="style.css">
-</head>
-
 <!-- Doodle Plugin -->
-<div id="innerscrollbar">
+<div id="doodle3_scrollcontainer">
 <form action="<?php echo wl() ?>" method="post" name="doodle__form" id="<?php echo $template['formId'] ?>" accept-charset="utf-8" >
 
 <input type="hidden" name="sectok" value="<?php echo getSecurityToken() ?>" />
@@ -28,7 +23,7 @@
 <input type="hidden" name="edit__entry"   value="">
 <input type="hidden" name="delete__entry" value="">
 
-<div class="table">
+
  <table class="inline">
    <tbody>
      <tr class="row0">
@@ -77,7 +72,7 @@
 
    </tbody>
  </table>
-</div>
+
 
 </form>
 </div>
