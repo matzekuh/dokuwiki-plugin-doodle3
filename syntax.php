@@ -308,10 +308,10 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
                 // the javascript source of these functions is in script.js
                 $this->template['doodleData']["$fullname"]['editLinks'] = 
                    '<a href="javascript:editEntry(\''.$formId.'\',\''.$fullname.'\')">'.
-                   '  <img src="'.DOKU_BASE.'lib/images/pencil.png" alt="edit entry" style="float:left">'.
+                   '  <img src="'.DOKU_BASE.'lib/plugins/doodle3/pencil.png" alt="edit entry" style="float:left">'.
                    '</a>'.
                    '<a href="javascript:deleteEntry(\''.$formId.'\',\''.$fullname.'\')">'.
-                   '  <img src="'.DOKU_BASE.'lib/images/del.png" alt="delete entry" style="float:left">'.
+                   '  <img src="'.DOKU_BASE.'lib/plugins/doodle3/del.png" alt="delete entry" style="float:left">'.
                    '</a>';
             }
         }
@@ -440,21 +440,23 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
         if ($this->params['closed']) return false;
         if (!$this->isLoggedIn()) return false;
 
+		$allowFlag = false;
         //check adminGroups
         if (!empty($this->params['adminGroups'])) {
             $adminGroups = explode('|', $this->params['adminGroups']); // array of adminGroups
             $usersGroups = $INFO['userinfo']['grps'];  // array of groups that the user is in
-            if (count(array_intersect($adminGroups, $usersGroups)) > 0) return true;
+            if (count(array_intersect($adminGroups, $usersGroups)) > 0) $allowFlag true;
         }
         
         //check adminUsers
         if (!empty($this->params['adminUsers'])) {
             $adminUsers = explode('|', $this->params['adminUsers']);
-            return in_array($_SERVER['REMOTE_USER'], $adminUsers);
+            if(in_array($_SERVER['REMOTE_USER'], $adminUsers)) $allowFlag = true;
         }
         
         //check own entry
-        return strcasecmp(hsc($INFO['userinfo']['name']), $entryFullname) == 0;  // compare real name
+        if(strcasecmp(hsc($INFO['userinfo']['name']), $entryFullname) == 0) $allowFlag = true;  // compare real name
+		return $allowFlag;
     }
     
     /** 
