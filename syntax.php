@@ -311,7 +311,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
                    '  <img src="'.DOKU_BASE.'lib/plugins/doodle3/pencil.png" alt="edit entry" style="float:left">'.
                    '</a>'.
                    '<a href="javascript:deleteEntry(\''.$formId.'\',\''.$fullname.'\')">'.
-                   '  <img src="'.DOKU_BASE.'lib/plugins/doodle3/del.png" alt="delete entry" style="float:left">'.
+                   '  <img src="'.DOKU_BASE.'lib/plugins/doodle3/delete.png" alt="delete entry" style="float:left">'.
                    '</a>';
             }
         }
