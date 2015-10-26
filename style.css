@@ -8,9 +8,9 @@ div.dokuwiki table.inline td.notokay {
   text-align: center;
 }
 
-.doodle3_scrollcontainer {
+.doodle2_scrollcontainer {
     overflow-x: auto;
-    margin-bottom:19.6px;
+	margin-bottom:19.6px;
 }
 
 .doodle__edit {
