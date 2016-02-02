@@ -87,7 +87,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
      * Handle the match, parse parameters & choices
      * and prepare everything for the render() method.
      */
-    function handle($match, $state, $pos, &$handler) {
+    function handle($match, $state, $pos, Doku_Handler $handler) {
         $match = substr($match, 8, -9);              // strip markup (including space after "<doodle ")
         list($parameterStr, $choiceStr) = preg_split('/>/u', $match, 2);
 
@@ -193,7 +193,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
      * add new vote if user just submitted one and
      * create output xHTML from template
      */
-    function render($mode, &$renderer, $data) {
+    function render($mode, Doku_Renderer $renderer, $data) {
         if ($mode != 'xhtml') return false;
         
         //debout("render: $mode");        
