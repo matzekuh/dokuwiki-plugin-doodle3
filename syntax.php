@@ -166,7 +166,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
      */
     function parseChoices($choiceStr) {
         $choices = array();
-        preg_match_all('/^   \* (.*?)$/m', $choiceStr, $matches, PREG_PATTERN_ORDER);
+        preg_match_all('/^\s{0,3}\* (.*?)$/m', $choiceStr, $matches, PREG_PATTERN_ORDER);
         foreach ($matches[1] as $choice) {
             $choice = hsc(trim($choice));
             if (!empty($choice)) {
