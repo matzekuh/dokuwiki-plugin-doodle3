@@ -99,7 +99,8 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
             'adminGroups'    => '',
             'adminMail'      => null,
             'voteType'       => 'default',
-            'closed'         => FALSE
+            'closed'         => FALSE,
+	    'fieldwidth'     => 'auto'
         );
 
         //----- parse parameteres into name="value" pairs  
@@ -154,7 +155,11 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
             } else
             if (strcmp($name, "SORT") == 0) {
                 $params['sort'] = $value;  // make it possible to sort by time
-            }
+            } else
+	    if (strcmp($name, "FIELDWITH") == 0) {
+		if (preg_match("/^[0-9]+px$/",$value,$hit) == 1)
+		    $params['fieldwidth'] = $hit[0];
+	    }
         }
 
         // (If there are no choices inside the <doodle> tag, then doodle's data will be reset.)
@@ -284,6 +289,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
         $this->template['result']     = $this->params['closed'] ? $this->getLang('final_result') : $this->getLang('count');
         $this->template['doodleData'] = array();  // this will be filled with some HTML snippets
         $this->template['formId']     = $formId;
+	$this->template['fieldwidth'] = $this->params['fieldwidth'];
         if ($this->params['closed']) {
             $this->template['msg'] = $this->getLang('poll_closed');
         }
