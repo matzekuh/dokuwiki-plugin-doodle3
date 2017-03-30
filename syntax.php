@@ -144,7 +144,13 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
                 $params['closed'] = 1;
             } else
             if (strcmp($name, "CLOSED") == 0) {
-                $params['closed'] = strcasecmp($value, "TRUE") == 0;
+		if (strcasecmp($value, "TRUE") == 0) {
+			$params['closed'] = 1;
+		} else if ($time = strtotime($value)) {
+			if ($time < time()) $params['closed'] = 1;
+		} else {
+                	$params['closed'] = 0;
+		}
             } else
             if (strcmp($name, "SORT") == 0) {
                 $params['sort'] = $value;  // make it possible to sort by time
