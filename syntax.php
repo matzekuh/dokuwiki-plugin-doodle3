@@ -156,7 +156,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
             if (strcmp($name, "SORT") == 0) {
                 $params['sort'] = $value;  // make it possible to sort by time
             } else
-	    if (strcmp($name, "FIELDWITH") == 0) {
+	    if (strcmp($name, "FIELDWIDTH") == 0) {
 		if (preg_match("/^[0-9]+px$/",$value,$hit) == 1)
 		    $params['fieldwidth'] = $hit[0];
 	    }
