@@ -26,6 +26,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
  *   adminUsers="user1|user2"
  *   adminGroups="group1|group2"
  *   voteType="default|multi"
+ *   fieldwidth="auto|123px"
  *   closed="true|false" >
  *     * Option 1 
  *     * Option 2 **some wikimarkup** \\ is __allowed__!
@@ -48,6 +49,11 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * default    - user can vote for exactly one option (round checkboxes will be shown)
  * multi      - can choose any number of options, including none (square checkboxes will be shown).
  *
+ * <h3>fieldwidth</h3>
+ * auto	      - width of option columns is determined by content (css: width:auto)
+ * 123px      - width of all option columns is set to provided value (e.g. css: width:123px)
+ 		valid values must match regexp: /^[0-9]+px$/ (see https://regex101.com/r/yKOhAo/1 for details)
+ *
  * If closed=="true", then no one can vote anymore. The result will still be shown on the page.
  *
  * The doodle's data is saved in '<dokuwiki>/data/meta/title_of_vote.doodle'. The filename is the (masked) title. 
@@ -66,7 +72,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
         return array(
             'author' => 'Matthias Jung',
             'email'  => 'matzekuh@web.de',
-            'date'   => '2015/10/18',
+            'date'   => '2017/03/30',
             'name'   => 'Doodle Plugin 3',
             'desc'   => 'helps to schedule meetings',
             'url'    => 'https://www.dokuwiki.org/plugin:doodle3',
