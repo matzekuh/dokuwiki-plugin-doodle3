@@ -26,6 +26,7 @@ require_once(DOKU_PLUGIN.'syntax.php');
  *   adminUsers="user1|user2"
  *   adminGroups="group1|group2"
  *   voteType="default|multi"
+ *   fieldwidth="auto|123px"
  *   closed="true|false" >
  *     * Option 1 
  *     * Option 2 **some wikimarkup** \\ is __allowed__!
@@ -48,6 +49,11 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * default    - user can vote for exactly one option (round checkboxes will be shown)
  * multi      - can choose any number of options, including none (square checkboxes will be shown).
  *
+ * <h3>fieldwidth</h3>
+ * auto	      - width of option columns is determined by content (css: width:auto)
+ * 123px      - width of all option columns is set to provided value (e.g. css: width:123px)
+ 		valid values must match regexp: /^[0-9]+px$/ (see https://regex101.com/r/yKOhAo/1 for details)
+ *
  * If closed=="true", then no one can vote anymore. The result will still be shown on the page.
  *
  * The doodle's data is saved in '<dokuwiki>/data/meta/title_of_vote.doodle'. The filename is the (masked) title. 
@@ -66,7 +72,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
         return array(
             'author' => 'Matthias Jung',
             'email'  => 'matzekuh@web.de',
-            'date'   => '2015/10/18',
+            'date'   => '2017/03/30',
             'name'   => 'Doodle Plugin 3',
             'desc'   => 'helps to schedule meetings',
             'url'    => 'https://www.dokuwiki.org/plugin:doodle3',
@@ -99,7 +105,8 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
             'adminGroups'    => '',
             'adminMail'      => null,
             'voteType'       => 'default',
-            'closed'         => FALSE
+            'closed'         => FALSE,
+	    'fieldwidth'     => 'auto'
         );
 
         //----- parse parameteres into name="value" pairs  
@@ -144,11 +151,21 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
                 $params['closed'] = 1;
             } else
             if (strcmp($name, "CLOSED") == 0) {
-                $params['closed'] = strcasecmp($value, "TRUE") == 0;
+		if (strcasecmp($value, "TRUE") == 0) {
+			$params['closed'] = 1;
+		} else if ($time = strtotime($value)) {
+			if ($time < time()) $params['closed'] = 1;
+		} else {
+                	$params['closed'] = 0;
+		}
             } else
             if (strcmp($name, "SORT") == 0) {
                 $params['sort'] = $value;  // make it possible to sort by time
-            }
+            } else
+	    if (strcmp($name, "FIELDWIDTH") == 0) {
+		if (preg_match("/^[0-9]+px$/",$value,$hit) == 1)
+		    $params['fieldwidth'] = $hit[0];
+	    }
         }
 
         // (If there are no choices inside the <doodle> tag, then doodle's data will be reset.)
@@ -278,6 +295,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
         $this->template['result']     = $this->params['closed'] ? $this->getLang('final_result') : $this->getLang('count');
         $this->template['doodleData'] = array();  // this will be filled with some HTML snippets
         $this->template['formId']     = $formId;
+	$this->template['fieldwidth'] = $this->params['fieldwidth'];
         if ($this->params['closed']) {
             $this->template['msg'] = $this->getLang('poll_closed');
         }
