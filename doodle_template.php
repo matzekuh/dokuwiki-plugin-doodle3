@@ -49,13 +49,19 @@
      </tr>
 <?php } ?>
  
-     <!-- Results / sum per column -->
-     <tr>
-         <th class="rightalign"><b><?php echo $template['result'] ?></b></th>
-<?php for ($col = 0; $col < $c; $col++) { ?>
-         <th class="centeralign"><b><?php echo $template['count'][$col] ?></b></th>
-<?php } ?>
-     </tr>
+<!-- Results / sum per column -->
+	 <?php 
+		if ($template['showSum']){
+				echo ' <th class="rightalign"><b>';
+				echo $template['result'];
+				echo '</b></th>';
+				for ($col = 0; $col < $c; $col++) {
+					echo '<th class="centeralign"><b>';
+					echo $template['count'][$col];
+					echo '</b></th>';
+				}
+		}
+	 ?>
 
 <?php
      /* Input fields, if allowed. */
