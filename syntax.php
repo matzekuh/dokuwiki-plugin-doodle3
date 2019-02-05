@@ -103,6 +103,8 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
             'auth'           => self::AUTH_NONE,
             'adminUsers'     => '',
             'adminGroups'    => '',
+	    'showMode'	     => 'all',
+	    'showSum'	     => TRUE,
             'adminMail'      => null,
             'voteType'       => 'default',
             'closed'         => FALSE,
@@ -159,6 +161,18 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
                 	$params['closed'] = 0;
 		}
             } else
+	    if (strcmp($name, "SHOWMODE") == 0) {
+		if ($value == 'all' || $value == 'own'){
+			$params['showMode'] = $value;
+		}
+            } else
+	    if (strcmp($name, "SHOWSUM") == 0) {
+		if (strcasecmp($value, "TRUE") == 0) {
+			$params['showSum'] = 1;
+		} else {
+			$params['showSum'] = 0;		
+		}
+            } else       
             if (strcmp($name, "SORT") == 0) {
                 $params['sort'] = $value;  // make it possible to sort by time
             } else
@@ -299,22 +313,25 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
         if ($this->params['closed']) {
             $this->template['msg'] = $this->getLang('poll_closed');
         }
+	$this->template['showSum'] = $this->params['showSum'];
         
         for($col = 0; $col < count($this->choices); $col++) {
             $this->template['count'][$col] = 0;
             foreach ($this->doodle as $fullname => $userData) {
-                if (!empty($userData['username'])) {
-                  $this->template['doodleData']["$fullname"]['username'] = '&nbsp;('.$userData['username'].')';
-                }
-                if (in_array($col, $userData['choices'])) {
-                    $timeLoc = strftime($conf['dformat'], $userData['time']);  // localized time of vote
-                    $this->template['doodleData']["$fullname"]['choice'][$col] = 
-                        '<td  class="centeralign" style="background-color:#AFA"><img src="'.DOKU_BASE.'lib/images/success.png" title="'.$timeLoc.'"></td>';
-                    $this->template['count']["$col"]++;
-                } else {
-                    $this->template['doodleData']["$fullname"]['choice'][$col] = 
-                        '<td  class="centeralign" style="background-color:#FCC">&nbsp;</td>';
-                }                
+		if ($this->isAllowedToSeeEntry($fullname)){    
+			if (!empty($userData['username'])) {
+			  $this->template['doodleData']["$fullname"]['username'] = '&nbsp;('.$userData['username'].')';
+			}
+			if (in_array($col, $userData['choices'])) {
+			    $timeLoc = strftime($conf['dformat'], $userData['time']);  // localized time of vote
+			    $this->template['doodleData']["$fullname"]['choice'][$col] = 
+				'<td  class="centeralign" style="background-color:#AFA"><img src="'.DOKU_BASE.'lib/images/success.png" title="'.$timeLoc.'"></td>';
+			    $this->template['count']["$col"]++;
+			} else {
+			    $this->template['doodleData']["$fullname"]['choice'][$col] = 
+				'<td  class="centeralign" style="background-color:#FCC">&nbsp;</td>';
+			}  
+		 }	  
             }
         }
         
@@ -475,6 +492,26 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
         //check own entry
         if(strcasecmp(hsc($INFO['userinfo']['name']), $entryFullname) == 0) $allowFlag = true;  // compare real name
 		return $allowFlag;
+    }
+	
+    /**
+     * check if the currently logged in user is allowed to see a given entry.
+     * @return true if entryFullname is the entry of the current user, or
+     *         the currently logged in user is in the list of admins, or
+	 * 		   showMode = all
+     */
+    function isAllowedToSeeEntry($entryFullname) {
+	$allowFlag = false;
+	//Check showMode
+	if ($this->params['showMode'] == 'own'){
+		//Check if entry is of current user or Admin Group (like Edit Entry)
+		if ( $this->isAllowedToEditEntry($entryFullname)){
+			$allowFlag = true;
+		}			
+	} else {
+		$allowFlag = true;
+	}
+	return $allowFlag;
     }
     
     /** 
