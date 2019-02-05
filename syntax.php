@@ -27,6 +27,8 @@ require_once(DOKU_PLUGIN.'syntax.php');
  *   adminGroups="group1|group2"
  *   voteType="default|multi"
  *   fieldwidth="auto|123px"
+ *   showMode="all|own"
+ *   showSum="true|false"
  *   closed="true|false" >
  *     * Option 1 
  *     * Option 2 **some wikimarkup** \\ is __allowed__!
@@ -52,7 +54,15 @@ require_once(DOKU_PLUGIN.'syntax.php');
  * <h3>fieldwidth</h3>
  * auto	      - width of option columns is determined by content (css: width:auto)
  * 123px      - width of all option columns is set to provided value (e.g. css: width:123px)
- 		valid values must match regexp: /^[0-9]+px$/ (see https://regex101.com/r/yKOhAo/1 for details)
+ *		valid values must match regexp: /^[0-9]+px$/ (see https://regex101.com/r/yKOhAo/1 for details)
+ *
+ * <h3>showmode</h3>
+ * all (default) - everyone can see every vote
+ * own 		 - only own vote is visible (except for admingroup)
+ *
+ * <h3>showsum</h3>
+ * true (default) - sum / result is displayed at the end
+ * false	  - no sum / result
  *
  * If closed=="true", then no one can vote anymore. The result will still be shown on the page.
  *
@@ -72,7 +82,7 @@ class syntax_plugin_doodle3 extends DokuWiki_Syntax_Plugin
         return array(
             'author' => 'Matthias Jung',
             'email'  => 'matzekuh@web.de',
-            'date'   => '2017/03/30',
+            'date'   => '2019/02/05',
             'name'   => 'Doodle Plugin 3',
             'desc'   => 'helps to schedule meetings',
             'url'    => 'https://www.dokuwiki.org/plugin:doodle3',
